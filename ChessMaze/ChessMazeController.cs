@@ -15,7 +15,7 @@ namespace ChessMaze
             //Create the first level
             int lvl1_id = 1;
             string lvl1_name = "Level 1";
-            IBoard lvl1_board = new Board(6, 6);
+            IBoard lvl1_board = new Board(6, 6, new MoveValidator();
             IPosition lvl1_start = new Position(1, 1);
             IPosition lvl1_end = new Position(6, 6);
             IPlayer lvl1_player = new Player(lvl1_start);

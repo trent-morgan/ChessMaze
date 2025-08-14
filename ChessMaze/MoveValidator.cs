@@ -10,33 +10,79 @@ namespace ChessMaze
     {
         public bool IsValidMove(PieceType pieceType, IPosition from, IPosition to, IBoard board)
         {
-            if (board.IsValidPosition(to) == false)
+            //Check is positio exists on board
+            if (!board.IsValidPosition(to))
                 return false;
 
-            //switch (pieceType)
-            //{
-            //    case PieceType.King:
-            //        return ;
+            //Checks if piece is actually moving
+            if (from == to)
+                return false;
 
-            //    case PieceType.Queen:
-            //        return ;
+            int rowDiff = to.Row - from.Row;
+            int colDiff = to.Column - from.Column;
 
-            //    case PieceType.Rook:
-            //        return ;
+            bool isStraight = from.Row == to.Row || from.Column == to.Column;
+            bool isDiagonal = Math.Abs(rowDiff) == Math.Abs(colDiff);
 
-            //    case PieceType.Bishop:
-            //        return ;
+            int rowStep = Math.Sign(rowDiff);
+            int colStep = Math.Sign(colDiff);
 
-            //    case PieceType.Knight:
-            //        return ;
+            //Checks if path is clear
+            bool PathIsClear()
+            {
+                int currentRow = from.Row + rowStep;
+                int currentCol = from.Column + colStep;
 
-            //    case PieceType.Pawn:
-            //        
-            //        return ;
+                while (currentRow != to.Row || currentCol != to.Column)
+                {
+                    var pos = new Position(currentRow, currentCol);
+                    if (board.GetPieceAt(pos).Type != PieceType.Empty)
+                        return false;
 
-            //    default:
-            //        return false;
-            //}
+                    currentRow += rowStep;
+                    currentCol += colStep;
+                }
+                return true;
+            }
+
+            switch (pieceType)
+            {
+                case PieceType.King:
+                    //Moves one space in any direction
+                    return Math.Abs(rowDiff) <= 1 && Math.Abs(colDiff) <= 1;
+
+                case PieceType.Queen:
+                    //Moves any amount of spaces in any direction
+                    if (!isStraight && !isDiagonal)
+                        return false;
+                    return PathIsClear();
+
+                case PieceType.Rook:
+                    //Moves any amount of spaces vertically or horizontally
+                    if (!isStraight)
+                        return false;
+                    return PathIsClear();
+
+                case PieceType.Bishop:
+                    //Moves any amount of spaces diagonally
+                    if (!isDiagonal)
+                        return false;
+                    return PathIsClear();
+
+                case PieceType.Knight:
+                    //Moves 1 space in a straight direction and 2 spaces in a perpindicular direction 
+                    //or 2 spaces in a straight direction and 1 space in a perpindicular direction 
+                    return (Math.Abs(rowDiff) == 2 && Math.Abs(colDiff) == 1) ||
+                           (Math.Abs(rowDiff) == 1 && Math.Abs(colDiff) == 2);
+
+                case PieceType.Pawn:
+                    // Pawn logic here...
+                    return true;
+
+                default:
+                    return false;
+            }
         }
+
     }
 }

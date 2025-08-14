@@ -18,12 +18,20 @@ namespace ChessMaze
 
         public bool Equals(IPosition other)
         {
-
+            if (other.Row == this.Row && other.Column == this.Column)
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool IsValid(int maxRows, int maxColumns)
         {
-
+            if (this.Row <= maxRows && this.Column <= maxColumns)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ChessMaze
             var board = CurrentLevel.Board;
             var from = player.CurrentPosition;
 
-            if (!board.IsValidPosition(newPosition) || !board.IsMoveLegal(from, newPosition, _moveValidator))
+            if (!board.TryMovePiece(from, newPosition))
             {
                 return false;
             }
